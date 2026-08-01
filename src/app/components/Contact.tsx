@@ -47,8 +47,8 @@ export function Contact() {
     {
       icon: Mail,
       label: "Email",
-      value: "hello@videoedit.com",
-      link: "mailto:hello@videoedit.com",
+      value: "hello@bipinstudios.com",
+      link: "mailto:hello@bipinstudios.com",
     },
     {
       icon: Phone,
@@ -135,7 +135,7 @@ export function Contact() {
                       rel="noopener noreferrer"
                       className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      Instagram: @videoedit
+                      Instagram: @bipinstudios
                     </a>
                     <a
                       href="https://youtube.com"
@@ -143,7 +143,7 @@ export function Contact() {
                       rel="noopener noreferrer"
                       className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      YouTube: VideoEdit Channel
+                      YouTube: Bipin Studios
                     </a>
                     <a
                       href="https://vimeo.com"
@@ -151,7 +151,7 @@ export function Contact() {
                       rel="noopener noreferrer"
                       className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      Vimeo: videoedit
+                      Vimeo: bipinstudios
                     </a>
                     <a
                       href="https://linkedin.com"

@@ -1,7 +1,40 @@
 import { Outlet, Link, useLocation } from "react-router";
 import { Button } from "./ui/button";
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useId, useState } from "react";
+
+function BrandMark({ className = "" }: { className?: string }) {
+  const gradientId = useId();
+
+  return (
+    <svg
+      viewBox="0 0 40 40"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      className={className}
+    >
+      <defs>
+        <linearGradient id={gradientId} x1="5" y1="4" x2="35" y2="36" gradientUnits="userSpaceOnUse">
+          <stop stopColor="#9333EA" />
+          <stop offset="1" stopColor="#EC4899" />
+        </linearGradient>
+      </defs>
+      <path
+        d="M6 14.5H34V31.5C34 33.433 32.433 35 30.5 35H9.5C7.567 35 6 33.433 6 31.5V14.5Z"
+        fill={`url(#${gradientId})`}
+      />
+      <path
+        d="M7.5 12.5L11 5H15L11.5 12.5M19 5L15.5 12.5M26.5 5L23 12.5M34 5L30.5 12.5"
+        stroke={`url(#${gradientId})`}
+        strokeWidth="4"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path d="M18 20.25L25 24.75L18 29.25V20.25Z" fill="white" />
+    </svg>
+  );
+}
 
 export function Root() {
   const location = useLocation();
@@ -29,8 +62,8 @@ export function Root() {
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2">
-              <div className="size-8 bg-gradient-to-br from-purple-600 to-pink-600 rounded-lg" />
-              <span className="font-bold text-xl">VideoEdit</span>
+              <BrandMark className="size-8 shrink-0" />
+              <span className="font-bold text-xl">Bipin Studios</span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -101,11 +134,11 @@ export function Root() {
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">
-              <div className="size-6 bg-gradient-to-br from-purple-600 to-pink-600 rounded" />
-              <span className="font-semibold">VideoEdit</span>
+              <BrandMark className="size-6 shrink-0" />
+              <span className="font-semibold">Bipin Studios</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              © 2026 VideoEdit. All rights reserved.
+              © 2026 Bipin Studios. All rights reserved.
             </p>
             <div className="flex gap-6">
               <a

@@ -6,14 +6,20 @@ import { Play } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 
 export function Portfolio() {
-  const categories = ["All", "Commercial", "Documentary", "Music Video", "Wedding", "Corporate"];
+  const categories = [
+    "All",
+    "Commercials",
+    "Real Estate",
+    "Documentary",
+    "Explainer Videos",
+  ];
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const projects = [
     {
       id: 1,
       title: "Tech Startup Launch",
-      category: "Corporate",
+      category: "Commercials",
       image: "https://images.unsplash.com/photo-1559136555-9303baea8ebd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx0ZWNoJTIwc3RhcnR1cCUyMG1vZGVybiUyMG9mZmljZXxlbnwxfHx8fDE3ODI2NTUxOTd8MA&ixlib=rb-4.1.0&q=80&w=1080",
       duration: "4:20",
       client: "TechCorp",
@@ -31,7 +37,7 @@ export function Portfolio() {
     {
       id: 3,
       title: "Product Commercial",
-      category: "Commercial",
+      category: "Commercials",
       image: "https://images.unsplash.com/photo-1616418625172-c607e16733ca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBjb21tZXJjaWFsJTIwYWR2ZXJ0aXNpbmd8ZW58MXx8fHwxNzgyNjU1MTU0fDA&ixlib=rb-4.1.0&q=80&w=1080",
       duration: "2:30",
       client: "Brand X",
@@ -40,7 +46,7 @@ export function Portfolio() {
     {
       id: 4,
       title: "Live Concert Film",
-      category: "Music Video",
+      category: "Explainer Videos",
       image: "https://images.unsplash.com/photo-1565035010268-a3816f98589a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtdXNpYyUyMHZpZGVvJTIwY29uY2VydCUyMHBlcmZvcm1hbmNlfGVufDF8fHx8MTc4MjY1NTE5NXww&ixlib=rb-4.1.0&q=80&w=1080",
       duration: "5:15",
       client: "Indie Artist",
@@ -49,7 +55,7 @@ export function Portfolio() {
     {
       id: 5,
       title: "Elegant Wedding Film",
-      category: "Wedding",
+      category: "Real Estate",
       image: "https://images.unsplash.com/photo-1606216794079-73f85bbd57d5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHx3ZWRkaW5nJTIwdmlkZW9ncmFwaHklMjByb21hbnRpY3xlbnwxfHx8fDE3ODI2NTUxOTZ8MA&ixlib=rb-4.1.0&q=80&w=1080",
       duration: "8:30",
       client: "Private Client",
@@ -58,7 +64,7 @@ export function Portfolio() {
     {
       id: 6,
       title: "Fashion Week Highlight",
-      category: "Commercial",
+      category: "Commercials",
       image: "https://images.unsplash.com/photo-1613909671501-f9678ffc1d33?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxmYXNoaW9uJTIwcnVud2F5JTIwbW9kZWx8ZW58MXx8fHwxNzgyNjU1MTk2fDA&ixlib=rb-4.1.0&q=80&w=1080",
       duration: "3:45",
       client: "Fashion House",
@@ -85,7 +91,7 @@ export function Portfolio() {
     {
       id: 9,
       title: "Behind the Scenes",
-      category: "Corporate",
+      category: "Real Estate",
       image: "https://images.unsplash.com/photo-1638545818407-ac7a54b544fd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjcmVhdGl2ZSUyMHN0dWRpbyUyMGZpbG1tYWtlcnxlbnwxfHx8fDE3ODI2NTUxNTN8MA&ixlib=rb-4.1.0&q=80&w=1080",
       duration: "6:50",
       client: "Studio",
@@ -93,10 +99,10 @@ export function Portfolio() {
     },
   ];
 
-  const filteredProjects =
-    selectedCategory === "All"
-      ? projects
-      : projects.filter((project) => project.category === selectedCategory);
+  const filteredProjects = projects.filter(
+    (project) =>
+      selectedCategory === "All" || project.category === selectedCategory,
+  );
 
   return (
     <div className="w-full">
