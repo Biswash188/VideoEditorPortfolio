@@ -63,7 +63,7 @@ export function Root() {
             {/* Logo */}
             <Link to="/" className="flex items-center gap-2">
               <BrandMark className="size-8 shrink-0" />
-              <span className="font-bold text-xl">Bipin Studios</span>
+              <span className="font-bold text-xl">My Portfolio</span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -135,10 +135,10 @@ export function Root() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
             <div className="flex items-center gap-2">
               <BrandMark className="size-6 shrink-0" />
-              <span className="font-semibold">Bipin Studios</span>
+              <span className="font-semibold">My Portfolio</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              © 2026 Bipin Studios. All rights reserved.
+              © 2026 My Portfolio. All rights reserved.
             </p>
             <div className="flex gap-6">
               <a

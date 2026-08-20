@@ -143,7 +143,7 @@ export function Contact() {
                       rel="noopener noreferrer"
                       className="block text-sm text-muted-foreground hover:text-foreground transition-colors"
                     >
-                      YouTube: Bipin Studios
+                      YouTube: My Portfolio
                     </a>
                     <a
                       href="https://vimeo.com"
