@@ -72,32 +72,32 @@ export function About() {
     {
       icon: Video,
       title: "Professional Editing",
-      description: "Expert in industry-standard editing software and techniques",
+      description: "Turning raw footage into polished, engaging videos with clean cuts, smooth pacing, and seamless storytelling.",
     },
     {
       icon: Sparkles,
       title: "Visual Effects",
-      description: "Creating stunning visual effects and motion graphics",
+      description: "Enhancing videos with creative effects, dynamic motion graphics, and visual elements that bring ideas to life.",
     },
     {
       icon: Zap,
       title: "Fast Turnaround",
-      description: "Efficient workflow without compromising quality",
+      description: "Delivering high-quality edits on schedule through an efficient and well-organized editing workflow.",
     },
     {
       icon: Layers,
       title: "Color Grading",
-      description: "Professional color correction and grading services",
+      description: "Enhancing the mood and visual style of every scene with balanced color correction and cinematic grading.",
     },
     {
       icon: Music,
       title: "Audio Mixing",
-      description: "Comprehensive audio editing and sound design",
+      description: "Creating clear, balanced sound through precise audio editing, mixing, and thoughtful sound design.",
     },
     {
       icon: Briefcase,
       title: "Project Management",
-      description: "Organized approach to handling multiple projects",
+      description: "Keeping every project organized from start to finish, with clear communication and attention to deadlines.",
     },
   ];
 
@@ -111,14 +111,13 @@ export function About() {
               <Badge className="mb-4">About Me</Badge>
               <h1 className="mb-6">Bringing Stories to Life Through Expert Editing</h1>
               <p className="text-lg text-muted-foreground mb-6">
-                I'm a passionate video editor with over 5 years of experience
-                transforming raw footage into compelling visual narratives. My work
-                spans commercials, documentaries, music videos, and corporate content.
+                I'm a dedicated video editor with over 5 years of experience turning raw footage into engaging and impactful visual stories.
+                My expertise covers a wide range of projects, including commercials, documentaries, music videos, and corporate productions.
               </p>
               <p className="text-muted-foreground mb-8">
-                With a keen eye for detail and a deep understanding of storytelling,
-                I collaborate closely with clients to ensure their vision comes to life
-                on screen. Every frame is crafted with precision and creativity.
+                I bring creativity, precision, and a strong sense of visual storytelling to every project. 
+                I work closely with clients to understand their ideas and transform their vision into engaging, polished content. 
+                Every cut, transition, and frame is thoughtfully crafted to create a compelling final result.
               </p>
               <Button asChild size="lg">
                 <Link to="/contact">Let's Work Together</Link>
@@ -173,7 +172,7 @@ export function About() {
             <div className="text-center mb-12">
               <h2 className="mb-4">Technical Skills</h2>
               <p className="text-muted-foreground">
-                Proficiency in industry-leading tools and techniques
+                Proficiency in industry leading tools and techniques
               </p>
             </div>
             <div className="grid md:grid-cols-2 gap-8">
@@ -226,45 +225,15 @@ export function About() {
         </div>
       </section>
 
-      {/* Awards */}
-      <section className="py-20 bg-muted/50">
-        <div className="container mx-auto px-4">
-          <div className="max-w-4xl mx-auto">
-            <div className="text-center mb-12">
-              <h2 className="mb-4">Awards & Recognition</h2>
-              <p className="text-muted-foreground">
-                Honored for excellence in video editing
-              </p>
-            </div>
-            <div className="grid md:grid-cols-3 gap-6">
-              {awards.map((award, index) => (
-                <Card key={index}>
-                  <CardContent className="p-6 text-center">
-                    <div className="inline-flex items-center justify-center size-16 rounded-full bg-yellow-100 dark:bg-yellow-900/20 mb-4">
-                      <award.icon className="size-8 text-yellow-600" />
-                    </div>
-                    <h3 className="font-semibold mb-2">{award.title}</h3>
-                    <p className="text-sm text-muted-foreground mb-1">
-                      {award.organization}
-                    </p>
-                    <Badge variant="outline">{award.year}</Badge>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
 
       {/* CTA */}
       <section className="py-20">
         <div className="container mx-auto px-4">
           <Card className="bg-gradient-to-br from-purple-600 to-pink-600 border-0 max-w-4xl mx-auto">
             <CardContent className="p-12 text-center text-white">
-              <h2 className="mb-4 text-white">Let's Create Something Amazing</h2>
+              <h2 className="mb-4 text-white">Bring Your Vision to Life</h2>
               <p className="text-white/90 mb-8 max-w-2xl mx-auto">
-                Ready to elevate your video content? Get in touch to discuss your
-                project and how I can help.
+                Have a project in mind? Let's work together to turn your ideas into engaging, professional video content that leaves a lasting impression.
               </p>
               <Button asChild size="lg" variant="secondary">
                 <Link to="/contact">Contact Me</Link>

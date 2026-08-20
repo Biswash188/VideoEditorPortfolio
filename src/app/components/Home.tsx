@@ -56,12 +56,11 @@ export function Home() {
               Professional Video Editor
             </Badge>
             <h1 className="mb-6">
-              Crafting Visual Stories That Captivate
+              Bringing Ideas to Life Through Video
             </h1>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Transforming raw footage into compelling narratives. Specializing in
-              commercials, documentaries, and brand content that resonates with
-              audiences.
+              Creating polished, engaging videos through creative editing and strong visual storytelling. 
+              Specializing in commercials, documentaries, and brand content.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button asChild size="lg">
@@ -203,10 +202,9 @@ export function Home() {
         <div className="container mx-auto px-4">
           <Card className="bg-gradient-to-br from-purple-600 to-pink-600 border-0">
             <CardContent className="p-12 text-center text-white">
-              <h2 className="mb-4 text-white">Ready to Start Your Project?</h2>
+              <h2 className="mb-4 text-white">Have a Project in Mind?</h2>
               <p className="text-white/90 mb-8 max-w-2xl mx-auto">
-                Let's collaborate to create something amazing. Get in touch to
-                discuss your video editing needs.
+                Let's bring your ideas to life with creative, professional video editing. Get in touch to discuss your project.
               </p>
               <Button asChild size="lg" variant="secondary">
                 <Link to="/contact">Contact Me</Link>
