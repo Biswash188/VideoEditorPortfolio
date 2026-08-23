@@ -5,6 +5,8 @@ import { Portfolio } from "./components/Portfolio";
 import { About } from "./components/About";
 import { Contact } from "./components/Contact";
 import { NotFound } from "./components/NotFound";
+import { AdminLogin } from "./components/AdminLogin";
+import { AdminDashboard } from "./components/AdminDashboard";
 
 export const router = createBrowserRouter([
   {
@@ -18,4 +20,6 @@ export const router = createBrowserRouter([
       { path: "*", Component: NotFound },
     ],
   },
+  { path: "/admin/login", Component: AdminLogin },
+  { path: "/admin", Component: AdminDashboard },
 ]);

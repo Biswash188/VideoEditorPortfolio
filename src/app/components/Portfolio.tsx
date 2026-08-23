@@ -1,21 +1,34 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Play } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { portfolioCategories } from "../../shared/portfolio";
 
 export function Portfolio() {
-  const categories = [
-    "All",
-    "Commercials",
-    "Real Estate",
-    "Documentary",
-    "Explainer Videos",
-  ];
+  const categories = ["All", ...portfolioCategories];
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [databaseProjects, setDatabaseProjects] = useState<Array<{ id: string; title: string; category: string; image?: string | null; videoUrl?: string | null; duration: string; client: string; year: string }>>([]);
 
-  const projects = [
+  useEffect(() => {
+    fetch("/api/videos")
+      .then(async (response) => response.ok ? response.json() : [])
+      .then((videos: Array<{ id: string; title: string; category: string; thumbnailUrl: string | null; videoUrl: string | null; durationSeconds: number | null; createdAt: string }>) => {
+        setDatabaseProjects(videos.map((video) => ({
+          id: video.id,
+          title: video.title,
+          category: video.category,
+          image: video.thumbnailUrl,
+          videoUrl: video.videoUrl,
+          duration: video.durationSeconds ? `${Math.floor(video.durationSeconds / 60)}:${String(video.durationSeconds % 60).padStart(2, "0")}` : "Video",
+          client: "Portfolio project",
+          year: String(new Date(video.createdAt).getFullYear()),
+        })));
+      }).catch(() => setDatabaseProjects([]));
+  }, []);
+
+  const projects: Array<{ id: number; title: string; category: string; image: string; duration: string; client: string; year: string; videoUrl?: string }> = [
     {
       id: 1,
       title: "Tech Startup Launch",
@@ -99,7 +112,7 @@ export function Portfolio() {
     },
   ];
 
-  const filteredProjects = projects.filter(
+  const filteredProjects = [...projects, ...databaseProjects].filter(
     (project) =>
       selectedCategory === "All" || project.category === selectedCategory,
   );
@@ -147,11 +160,7 @@ export function Portfolio() {
                 className="group overflow-hidden cursor-pointer hover:shadow-xl transition-shadow"
               >
                 <div className="relative aspect-video overflow-hidden">
-                  <ImageWithFallback
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                  />
+                  {project.videoUrl ? <video src={project.videoUrl} poster={project.image ?? undefined} controls preload="metadata" className="w-full h-full object-cover" /> : <ImageWithFallback src={project.image!} alt={project.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
                     <div className="size-20 rounded-full bg-white/90 flex items-center justify-center transform group-hover:scale-110 transition-transform">
