@@ -1,8 +1,8 @@
 import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
-import { requireAdmin } from "../../src/server/auth";
-import { requireBlobReadWriteToken } from "../../src/server/env";
-import { ApiError, withErrorHandling } from "../../src/server/errors";
-import { createVideo, getVideoByBlobUrl } from "../../src/server/database/videos";
+import { requireAdmin } from "../../src/server/auth.js";
+import { requireBlobReadWriteToken } from "../../src/server/env.js";
+import { ApiError, withErrorHandling } from "../../src/server/errors.js";
+import { createVideo, getVideoByBlobUrl } from "../../src/server/database/videos.js";
 import {
   createVideoBlobPath,
   getVideoContentType,

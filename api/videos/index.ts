@@ -1,5 +1,6 @@
-import { listPublishedVideos } from "../../src/server/database/videos";
-import { withErrorHandling } from "../../src/server/errors";
+import { listPublishedVideos } from "../../src/server/database/videos.js";
+
+import { withErrorHandling } from "../../src/server/errors.js";
 
 export default { fetch: withErrorHandling(async (request) => {
   if (request.method !== "GET") return Response.json({ error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed." } }, { status: 405, headers: { Allow: "GET" } });
