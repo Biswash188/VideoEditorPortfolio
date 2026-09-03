@@ -30,13 +30,7 @@ export function Home() {
     },
   ];
 
-  const stats = [
-    { icon: Film, value: "150+", label: "Projects Completed" },
-    { icon: Award, value: "25+", label: "Awards Won" },
-    { icon: Users, value: "80+", label: "Happy Clients" },
-    { icon: Sparkles, value: "5+", label: "Years Experience" },
-  ];
-
+ 
   return (
     <div className="w-full">
       {/* Hero Section */}
@@ -77,22 +71,7 @@ export function Home() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 bg-muted/50">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="inline-flex items-center justify-center size-12 rounded-full bg-primary/10 mb-4">
-                  <stat.icon className="size-6 text-primary" />
-                </div>
-                <div className="font-bold text-3xl mb-1">{stat.value}</div>
-                <div className="text-sm text-muted-foreground">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+  
 
       {/* Featured Projects */}
       <section className="py-20">

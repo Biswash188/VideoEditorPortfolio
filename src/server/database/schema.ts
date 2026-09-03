@@ -2,6 +2,7 @@ import { index, integer, pgEnum, pgTable, text, timestamp, uuid, varchar, boolea
 
 export const contactRequestStatus = pgEnum("contact_request_status", [
   "new",
+  "read",
   "in_progress",
   "closed",
 ]);

@@ -17,12 +17,31 @@ export function Contact() {
   });
 
   const [submitted, setSubmitted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Mock form submission
-    setSubmitted(true);
-    setTimeout(() => {
+    setSubmitting(true);
+    setError("");
+
+    try {
+      const response = await fetch("/api/contact-requests", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          projectType: formData.projectType,
+          message: formData.message,
+        }),
+      });
+
+      if (!response.ok) {
+        const body = await response.json().catch(() => null) as { error?: { message?: string } } | null;
+        throw new Error(body?.error?.message ?? "Unable to send your message. Please try again.");
+      }
+
       setSubmitted(false);
       setFormData({
         name: "",
@@ -31,7 +50,12 @@ export function Contact() {
         projectType: "",
         message: "",
       });
-    }, 3000);
+      setSubmitted(true);
+    } catch (cause) {
+      setError(cause instanceof Error ? cause.message : "Unable to send your message. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const handleChange = (
@@ -47,25 +71,25 @@ export function Contact() {
     {
       icon: Mail,
       label: "Email",
-      value: "hello@bipinstudios.com",
+      value: "bn660568@gmail.com",
       link: "mailto:hello@bipinstudios.com",
     },
     {
       icon: Phone,
       label: "Phone",
-      value: "+1 (555) 123-4567",
+      value: "+977 9803928281",
       link: "tel:+15551234567",
     },
     {
       icon: MapPin,
       label: "Location",
-      value: "Los Angeles, CA",
+      value: "Kathmandu, Nepal",
       link: null,
     },
     {
       icon: Clock,
       label: "Hours",
-      value: "Mon-Fri, 9AM-6PM PST",
+      value: "Mon-Fri, 9AM-6PM NPT",
       link: null,
     },
   ];
@@ -180,9 +204,13 @@ export function Contact() {
                       <p className="text-muted-foreground">
                         Thank you for reaching out. I'll get back to you soon.
                       </p>
+                      <Button className="mt-6" variant="outline" onClick={() => setSubmitted(false)}>
+                        Send another message
+                      </Button>
                     </div>
                   ) : (
                     <form onSubmit={handleSubmit} className="space-y-6">
+                      {error && <p className="rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive" role="alert">{error}</p>}
                       <div className="grid md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                           <Label htmlFor="name">Name *</Label>
@@ -256,9 +284,9 @@ export function Contact() {
                         />
                       </div>
 
-                      <Button type="submit" size="lg" className="w-full">
+                      <Button type="submit" size="lg" className="w-full" disabled={submitting}>
                         <Send className="mr-2 size-4" />
-                        Send Message
+                        {submitting ? "Sending…" : "Send Message"}
                       </Button>
                     </form>
                   )}

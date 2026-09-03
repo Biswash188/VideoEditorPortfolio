@@ -11,6 +11,14 @@ const optionalServerEnvSchema = z.object({
 export type ServerEnv = z.infer<typeof optionalServerEnvSchema>;
 
 export function getServerEnv(): ServerEnv {
+  console.log("ENV CHECK:", {
+    ADMIN_EMAIL: process.env.ADMIN_EMAIL ? "SET" : "MISSING",
+    ADMIN_PASSWORD_HASH: process.env.ADMIN_PASSWORD_HASH ? "SET" : "MISSING",
+    AUTH_SECRET: process.env.AUTH_SECRET ? "SET" : "MISSING",
+    DATABASE_URL: process.env.DATABASE_URL ? "SET" : "MISSING",
+    BLOB_READ_WRITE_TOKEN: process.env.BLOB_READ_WRITE_TOKEN ? "SET" : "MISSING",
+  });
+
   return optionalServerEnvSchema.parse({
     DATABASE_URL: process.env.DATABASE_URL,
     ADMIN_EMAIL: process.env.ADMIN_EMAIL,

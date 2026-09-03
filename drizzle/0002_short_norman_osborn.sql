@@ -1,0 +1,1 @@
+ALTER TYPE "public"."contact_request_status" ADD VALUE 'read' BEFORE 'in_progress';

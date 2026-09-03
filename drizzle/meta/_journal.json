@@ -15,6 +15,13 @@
       "when": 1787247784998,
       "tag": "0001_dapper_veda",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1788191986824,
+      "tag": "0002_short_norman_osborn",
+      "breakpoints": true
     }
   ]
 }
