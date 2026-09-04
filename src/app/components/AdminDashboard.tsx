@@ -1,14 +1,14 @@
 import { ChangeEvent, FormEvent, useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { Film, Inbox, LayoutDashboard, Pencil, Plus, Trash2, Upload } from "lucide-react";
-import { Button } from "./ui/button";
-import { Card, CardContent } from "./ui/card";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import { Textarea } from "./ui/textarea";
-import { Badge } from "./ui/badge";
-import { uploadPortfolioThumbnail, uploadPortfolioVideo } from "../lib/video-upload";
-import { portfolioCategories } from "../../shared/portfolio";
+import { Button } from "./ui/button.js";
+import { Card, CardContent } from "./ui/card.js";
+import { Input } from "./ui/input.js";
+import { Label } from "./ui/label.js";
+import { Textarea } from "./ui/textarea.js";
+import { Badge } from "./ui/badge.js";
+import { uploadPortfolioThumbnail, uploadPortfolioVideo } from "../lib/video-upload.js";
+import { portfolioCategories } from "../../shared/portfolio.js";
 
 type Tab = "overview" | "videos" | "upload" | "contacts" | "analytics";
 type Video = { id: string; title: string; description: string; category: string; videoUrl: string | null; thumbnailUrl: string | null; durationSeconds: number | null; isPublished: boolean; isFeatured: boolean; displayOrder: number };

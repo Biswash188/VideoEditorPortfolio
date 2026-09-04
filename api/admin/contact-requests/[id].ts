@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { requireAdmin } from "../../../src/server/auth";
-import { deleteContactRequest, updateContactRequest } from "../../../src/server/database/contact-requests";
-import { ApiError, withErrorHandling } from "../../../src/server/errors";
-import { parseJsonBody } from "../../../src/server/validation";
+import { requireAdmin } from "../../../src/server/auth.js";
+import { deleteContactRequest, updateContactRequest } from "../../../src/server/database/contact-requests.js";
+import { ApiError, withErrorHandling } from "../../../src/server/errors.js";
+import { parseJsonBody } from "../../../src/server/validation.js";
 
 const updateSchema = z.object({ status: z.enum(["new", "read", "in_progress", "closed"]) }).strict();
 export default { fetch: withErrorHandling(async (request) => {

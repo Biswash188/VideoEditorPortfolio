@@ -1,11 +1,11 @@
 import { asc, eq } from "drizzle-orm";
-import { getDatabase } from "../db";
+import { getDatabase } from "../db.js";
 import {
   contactRequests,
   type ContactRequest,
   type ContactRequestStatus,
   type NewContactRequest,
-} from "./schema";
+} from "./schema.js";
 
 export type CreateContactRequest = Omit<
   NewContactRequest,

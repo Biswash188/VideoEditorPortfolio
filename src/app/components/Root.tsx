@@ -1,5 +1,5 @@
 import { Outlet, Link, useLocation } from "react-router";
-import { Button } from "./ui/button";
+import { Button } from "./ui/button.js";
 import { Menu, X } from "lucide-react";
 import { useId, useState } from "react";
 

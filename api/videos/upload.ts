@@ -9,7 +9,7 @@ import {
   isSupportedVideoContentType,
   parseVideoUploadPayload,
   VIDEO_BLOB_PATH_PREFIX,
-} from "../../src/shared/video-upload";
+} from "../../src/shared/video-upload.js";
 
 function validateUploadPath(pathname: string, fileName: string): void {
   if (pathname !== createVideoBlobPath(fileName)) {

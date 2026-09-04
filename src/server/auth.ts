@@ -1,6 +1,6 @@
 import { createHmac, randomBytes, scrypt, timingSafeEqual } from "node:crypto";
-import { requireAdminAuthConfig } from "./env";
-import { ApiError } from "./errors";
+import { requireAdminAuthConfig } from "./env.js";
+import { ApiError } from "./errors.js";
 
 const SESSION_COOKIE_NAME = "portfolio_admin_session";
 const SESSION_MAX_AGE_SECONDS = 60 * 60 * 12;

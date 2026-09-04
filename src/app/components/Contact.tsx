@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { Card, CardContent } from "./ui/card";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { Label } from "./ui/label";
-import { Badge } from "./ui/badge";
+import { Card, CardContent } from "./ui/card.js";
+import { Button } from "./ui/button.js";
+import { Input } from "./ui/input.js";
+import { Textarea } from "./ui/textarea.js";
+import { Label } from "./ui/label.js";
+import { Badge } from "./ui/badge.js";
 import { Mail, Phone, MapPin, Clock, Send } from "lucide-react";
 
 export function Contact() {

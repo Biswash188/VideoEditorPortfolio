@@ -1,9 +1,9 @@
 import { Link } from "react-router";
-import { Button } from "./ui/button";
-import { Card, CardContent } from "./ui/card";
-import { Badge } from "./ui/badge";
+import { Button } from "./ui/button.js";
+import { Card, CardContent } from "./ui/card.js";
+import { Badge } from "./ui/badge.js";
 import { Play, Film, Scissors, Sparkles, Award, Users } from "lucide-react";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { ImageWithFallback } from "./figma/ImageWithFallback.js";
 
 export function Home() {
   const featuredProjects = [

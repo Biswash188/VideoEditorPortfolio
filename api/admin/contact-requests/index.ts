@@ -1,6 +1,6 @@
-import { requireAdmin } from "../../../src/server/auth";
-import { listContactRequests } from "../../../src/server/database/contact-requests";
-import { withErrorHandling } from "../../../src/server/errors";
+import { requireAdmin } from "../../../src/server/auth.js";
+import { listContactRequests } from "../../../src/server/database/contact-requests.js";
+import { withErrorHandling } from "../../../src/server/errors.js";
 
 export default { fetch: withErrorHandling(async (request) => {
   requireAdmin(request);

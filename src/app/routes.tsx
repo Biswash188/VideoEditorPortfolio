@@ -1,12 +1,12 @@
 import { createBrowserRouter } from "react-router";
-import { Root } from "./components/Root";
-import { Home } from "./components/Home";
-import { Portfolio } from "./components/Portfolio";
-import { About } from "./components/About";
-import { Contact } from "./components/Contact";
-import { NotFound } from "./components/NotFound";
-import { AdminLogin } from "./components/AdminLogin";
-import { AdminDashboard } from "./components/AdminDashboard";
+import { Root } from "./components/Root.js";
+import { Home } from "./components/Home.js";
+import { Portfolio } from "./components/Portfolio.js";
+import { About } from "./components/About.js";
+import { Contact } from "./components/Contact.js";
+import { NotFound } from "./components/NotFound.js";
+import { AdminLogin } from "./components/AdminLogin.js";
+import { AdminDashboard } from "./components/AdminDashboard.js";
 
 export const router = createBrowserRouter([
   {

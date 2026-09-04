@@ -1,6 +1,6 @@
 import { asc, eq } from "drizzle-orm";
-import { getDatabase } from "../db";
-import { videos, type NewVideoProject, type VideoProject } from "./schema";
+import { getDatabase } from "../db.js";
+import { videos, type NewVideoProject, type VideoProject } from "./schema.js";
 
 export type CreateVideoProject = Omit<
   NewVideoProject,

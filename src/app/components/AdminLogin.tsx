@@ -1,9 +1,9 @@
 import { FormEvent, useState } from "react";
 import { useNavigate } from "react-router";
-import { Button } from "./ui/button";
-import { Card, CardContent } from "./ui/card";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
+import { Button } from "./ui/button.js";
+import { Card, CardContent } from "./ui/card.js";
+import { Input } from "./ui/input.js";
+import { Label } from "./ui/label.js";
 
 export function AdminLogin() {
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
-import { Card, CardContent } from "./ui/card";
-import { Badge } from "./ui/badge";
-import { Button } from "./ui/button";
+import { Card, CardContent } from "./ui/card.js";
+import { Badge } from "./ui/badge.js";
+import { Button } from "./ui/button.js";
 import { Link } from "react-router";
 import { 
   Award, 
@@ -12,7 +12,7 @@ import {
   Layers,
   Music
 } from "lucide-react";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
+import { ImageWithFallback } from "./figma/ImageWithFallback.js";
 
 export function About() {
   const skills = [

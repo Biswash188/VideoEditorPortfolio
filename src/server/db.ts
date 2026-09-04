@@ -1,7 +1,7 @@
 import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
-import { requireDatabaseUrl } from "./env";
-import * as schema from "./database/schema";
+import { requireDatabaseUrl } from "./env.js";
+import * as schema from "./database/schema.js";
 
 function createDatabase() {
   const sql = neon(requireDatabaseUrl());

@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { Card, CardContent } from "./ui/card";
-import { Badge } from "./ui/badge";
-import { Button } from "./ui/button";
+import { Card, CardContent } from "./ui/card.js";
+import { Badge } from "./ui/badge.js";
+import { Button } from "./ui/button.js";
 import { Play } from "lucide-react";
-import { ImageWithFallback } from "./figma/ImageWithFallback";
-import { portfolioCategories } from "../../shared/portfolio";
+import { ImageWithFallback } from "./figma/ImageWithFallback.js";
+import { portfolioCategories } from "../../shared/portfolio.js";
 
 export function Portfolio() {
   const categories = ["All", ...portfolioCategories];

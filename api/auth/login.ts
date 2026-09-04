@@ -1,8 +1,8 @@
 import { z } from "zod";
-import { createAdminSessionCookie, verifyAdminPassword } from "../../src/server/auth";
-import { getServerEnv } from "../../src/server/env";
-import { ApiError, withErrorHandling } from "../../src/server/errors";
-import { parseJsonBody } from "../../src/server/validation";
+import { createAdminSessionCookie, verifyAdminPassword } from "../../src/server/auth.js";
+import { getServerEnv } from "../../src/server/env.js";
+import { ApiError, withErrorHandling } from "../../src/server/errors.js";
+import { parseJsonBody } from "../../src/server/validation.js";
 
 const loginSchema = z.object({ email: z.string().email(), password: z.string().min(1).max(1_024) }).strict();
 

@@ -1,9 +1,9 @@
 import { z } from "zod";
-import { requireAdmin } from "../../../src/server/auth";
-import { createVideo, listVideos } from "../../../src/server/database/videos";
-import { withErrorHandling } from "../../../src/server/errors";
-import { parseJsonBody } from "../../../src/server/validation";
-import { videoProjectMetadataSchema } from "../../../src/shared/video-upload";
+import { requireAdmin } from "../../../src/server/auth.js";
+import { createVideo, listVideos } from "../../../src/server/database/videos.js";
+import { withErrorHandling } from "../../../src/server/errors.js";
+import { parseJsonBody } from "../../../src/server/validation.js";
+import { videoProjectMetadataSchema } from "../../../src/shared/video-upload.js";
 
 const createSchema = videoProjectMetadataSchema.extend({ videoUrl: z.string().url().max(2_048) }).strict();
 export default { fetch: withErrorHandling(async (request) => {

@@ -5,7 +5,7 @@ import {
   type VideoProjectMetadata,
   validateVideoFile,
   videoProjectMetadataSchema,
-} from "../../shared/video-upload";
+} from "../../shared/video-upload.js";
 
 export type UploadProgress = { loaded: number; total: number; percentage: number };
 
