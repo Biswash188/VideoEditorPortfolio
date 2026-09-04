@@ -11,6 +11,11 @@ import {
   VIDEO_BLOB_PATH_PREFIX,
 } from "../../src/shared/video-upload.js";
 
+const THUMBNAIL_BLOB_PATH_PREFIX = "portfolio-thumbnails/";
+const THUMBNAIL_UPLOAD_TOKEN_PAYLOAD = "thumbnail";
+const THUMBNAIL_CONTENT_TYPES = ["image/jpeg", "image/png", "image/webp"];
+const MAX_THUMBNAIL_SIZE = 10 * 1024 * 1024;
+
 function validateUploadPath(pathname: string, fileName: string): void {
   if (pathname !== createVideoBlobPath(fileName)) {
     throw new ApiError(400, "INVALID_UPLOAD_PATH", "Invalid video upload destination.");
@@ -36,6 +41,15 @@ async function handleVideoUpload(request: Request): Promise<Response> {
       // are signature-verified by handleUpload before onUploadCompleted is invoked.
       await requireAdmin(request);
 
+      if (pathname.startsWith(THUMBNAIL_BLOB_PATH_PREFIX)) {
+        return {
+          allowedContentTypes: THUMBNAIL_CONTENT_TYPES,
+          maximumSizeInBytes: MAX_THUMBNAIL_SIZE,
+          addRandomSuffix: true,
+          tokenPayload: THUMBNAIL_UPLOAD_TOKEN_PAYLOAD,
+        };
+      }
+
       let uploadPayload: ReturnType<typeof parseVideoUploadPayload>;
 
       try {
@@ -53,6 +67,10 @@ async function handleVideoUpload(request: Request): Promise<Response> {
       };
     },
     onUploadCompleted: async ({ blob, tokenPayload }) => {
+      if (tokenPayload === THUMBNAIL_UPLOAD_TOKEN_PAYLOAD) {
+        return;
+      }
+
       const uploadPayload = parseVideoUploadPayload(tokenPayload ?? null);
       const expectedContentType = getVideoContentType(uploadPayload.file.name);
 

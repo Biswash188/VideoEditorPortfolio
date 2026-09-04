@@ -48,5 +48,5 @@ export async function uploadPortfolioThumbnail(file: File, signal?: AbortSignal)
   if (!allowed.includes(file.type)) throw new Error("Choose a JPG, PNG, or WebP thumbnail.");
   if (!file.size || file.size > 10 * 1024 * 1024) throw new Error("Thumbnails must be 10 MiB or smaller.");
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]+/g, "-");
-  return upload(`portfolio-thumbnails/${safeName}`, file, { access: "public", contentType: file.type, handleUploadUrl: "/api/videos/thumbnail-upload", multipart: true, abortSignal: signal });
+  return upload(`portfolio-thumbnails/${safeName}`, file, { access: "public", contentType: file.type, handleUploadUrl: "/api/videos/upload", multipart: true, abortSignal: signal });
 }
