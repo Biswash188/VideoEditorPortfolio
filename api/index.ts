@@ -31,12 +31,13 @@ const exactRoutes: Record<string, ApiHandler> = {
 };
 
 /**
- * This single catch-all function keeps the public API URLs unchanged while
- * avoiding one Vercel Function per endpoint on plans with a function cap.
+ * This single conventional Vercel function keeps the public API URLs unchanged
+ * while avoiding one Vercel Function per endpoint on plans with a function cap.
  */
 export default {
   async fetch(request: Request): Promise<Response> {
-    const path = new URL(request.url).pathname.replace(/^\/api\/?/, "").replace(/\/$/, "");
+    const url = new URL(request.url);
+    const path = (url.searchParams.get("route") ?? "").replace(/^\/+|\/+$/g, "");
     const handler = exactRoutes[path]
       ?? (/^admin\/videos\/[^/]+$/.test(path) ? videoById : undefined)
       ?? (/^admin\/contact-requests\/[^/]+$/.test(path) ? contactRequestById : undefined);
