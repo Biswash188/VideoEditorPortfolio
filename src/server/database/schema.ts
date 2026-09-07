@@ -1,4 +1,4 @@
-import { index, integer, pgEnum, pgTable, text, timestamp, uuid, varchar, boolean } from "drizzle-orm/pg-core";
+import { index, integer, pgEnum, pgTable, text, timestamp, uuid, varchar, boolean, bigint } from "drizzle-orm/pg-core";
 
 export const contactRequestStatus = pgEnum("contact_request_status", [
   "new",
@@ -16,6 +16,11 @@ export const videos = pgTable(
     category: varchar("category", { length: 100 }).notNull(),
     // Vercel Blob object URLs are stored here; media bytes never enter Postgres.
     videoUrl: text("video_url"),
+    googleDriveFileId: varchar("google_drive_file_id", { length: 255 }),
+    googleDriveFolderId: varchar("google_drive_folder_id", { length: 255 }),
+    originalFilename: varchar("original_filename", { length: 255 }),
+    mimeType: varchar("mime_type", { length: 100 }),
+    fileSize: bigint("file_size", { mode: "number" }),
     thumbnailUrl: text("thumbnail_url"),
     durationSeconds: integer("duration_seconds"),
     isPublished: boolean("is_published").notNull().default(true),
@@ -34,6 +39,20 @@ export const videos = pgTable(
     ),
   ],
 );
+
+export const uploadSessions = pgTable("video_upload_sessions", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  adminEmail: varchar("admin_email", { length: 255 }).notNull(),
+  completionToken: varchar("completion_token", { length: 128 }).notNull().unique(),
+  filename: varchar("filename", { length: 255 }).notNull(),
+  mimeType: varchar("mime_type", { length: 100 }).notNull(),
+  fileSize: bigint("file_size", { mode: "number" }).notNull(),
+  metadata: text("metadata").notNull(),
+  googleDriveFileId: varchar("google_drive_file_id", { length: 255 }),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  completedAt: timestamp("completed_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+}, (table) => [index("video_upload_sessions_expires_at_idx").on(table.expiresAt)]);
 
 export const contactRequests = pgTable(
   "contact_requests",

@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { requireAdmin } from "../../../src/server/auth.js";
-import { deleteVideo, updateVideo } from "../../../src/server/database/videos.js";
+import { deleteVideo, getVideoById, updateVideo } from "../../../src/server/database/videos.js";
+import { renameDriveFile, trashDriveFile } from "../../../src/server/google-drive.js";
 import { ApiError, withErrorHandling } from "../../../src/server/errors.js";
 import { parseJsonBody } from "../../../src/server/validation.js";
 import { videoProjectMetadataSchema } from "../../../src/shared/video-upload.js";
@@ -10,7 +11,7 @@ export default { fetch: withErrorHandling(async (request) => {
   requireAdmin(request);
   const id = new URL(request.url).pathname.split("/").pop();
   if (!id) throw new ApiError(400, "INVALID_VIDEO_ID", "Video id is required.");
-  if (request.method === "PATCH") { const video = await updateVideo(id, await parseJsonBody(request, updateSchema)); if (!video) throw new ApiError(404, "NOT_FOUND", "Video not found."); return Response.json(video); }
-  if (request.method === "DELETE") { const video = await deleteVideo(id); if (!video) throw new ApiError(404, "NOT_FOUND", "Video not found."); return Response.json({ deleted: true }); }
+  if (request.method === "PATCH") { const input = await parseJsonBody(request, updateSchema); const current = await getVideoById(id); if (!current) throw new ApiError(404, "NOT_FOUND", "Video not found."); if (current.googleDriveFileId && input.title && input.title !== current.title) { const extension = current.originalFilename?.match(/(\.[^.]+)$/)?.[1] ?? ""; await renameDriveFile(current.googleDriveFileId, `${input.title}${extension}`); } const video = await updateVideo(id, input); return Response.json(video); }
+  if (request.method === "DELETE") { const current = await getVideoById(id); if (!current) throw new ApiError(404, "NOT_FOUND", "Video not found."); if (current.googleDriveFileId) await trashDriveFile(current.googleDriveFileId); const video = await deleteVideo(id); return Response.json({ deleted: Boolean(video) }); }
   return Response.json({ error: { code: "METHOD_NOT_ALLOWED", message: "Method not allowed." } }, { status: 405, headers: { Allow: "PATCH, DELETE" } });
 }) };

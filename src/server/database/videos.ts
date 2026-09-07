@@ -1,6 +1,6 @@
 import { asc, eq } from "drizzle-orm";
 import { getDatabase } from "../db.js";
-import { videos, type NewVideoProject, type VideoProject } from "./schema.js";
+import { uploadSessions, videos, type NewVideoProject, type VideoProject } from "./schema.js";
 
 export type CreateVideoProject = Omit<
   NewVideoProject,
@@ -45,6 +45,11 @@ export async function getVideoByBlobUrl(
   return video;
 }
 
+export async function getVideoByGoogleDriveFileId(fileId: string): Promise<VideoProject | undefined> {
+  const [video] = await getDatabase().select().from(videos).where(eq(videos.googleDriveFileId, fileId)).limit(1);
+  return video;
+}
+
 export async function createVideo(
   input: CreateVideoProject,
 ): Promise<VideoProject> {
@@ -72,4 +77,17 @@ export async function deleteVideo(id: string): Promise<VideoProject | undefined>
     .returning();
 
   return video;
+}
+
+export async function createUploadSession(input: typeof uploadSessions.$inferInsert) {
+  const [session] = await getDatabase().insert(uploadSessions).values(input).returning();
+  return session;
+}
+export async function getUploadSession(id: string) {
+  const [session] = await getDatabase().select().from(uploadSessions).where(eq(uploadSessions.id, id)).limit(1);
+  return session;
+}
+export async function completeUploadSession(id: string, fileId: string) {
+  const [session] = await getDatabase().update(uploadSessions).set({ googleDriveFileId: fileId, completedAt: new Date() }).where(eq(uploadSessions.id, id)).returning();
+  return session;
 }

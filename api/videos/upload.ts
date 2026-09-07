@@ -2,25 +2,11 @@ import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
 import { requireAdmin } from "../../src/server/auth.js";
 import { requireBlobReadWriteToken } from "../../src/server/env.js";
 import { ApiError, withErrorHandling } from "../../src/server/errors.js";
-import { createVideo, getVideoByBlobUrl } from "../../src/server/database/videos.js";
-import {
-  createVideoBlobPath,
-  getVideoContentType,
-  isSupportedVideoContentType,
-  parseVideoUploadPayload,
-  VIDEO_BLOB_PATH_PREFIX,
-} from "../../src/shared/video-upload.js";
 
 const THUMBNAIL_BLOB_PATH_PREFIX = "portfolio-thumbnails/";
 const THUMBNAIL_UPLOAD_TOKEN_PAYLOAD = "thumbnail";
 const THUMBNAIL_CONTENT_TYPES = ["image/jpeg", "image/png", "image/webp"];
 const MAX_THUMBNAIL_SIZE = 10 * 1024 * 1024;
-
-function validateUploadPath(pathname: string, fileName: string): void {
-  if (pathname !== createVideoBlobPath(fileName)) {
-    throw new ApiError(400, "INVALID_UPLOAD_PATH", "Invalid video upload destination.");
-  }
-}
 
 async function handleVideoUpload(request: Request): Promise<Response> {
   if (request.method !== "POST") {
@@ -50,48 +36,10 @@ async function handleVideoUpload(request: Request): Promise<Response> {
         };
       }
 
-      let uploadPayload: ReturnType<typeof parseVideoUploadPayload>;
-
-      try {
-        uploadPayload = parseVideoUploadPayload(clientPayload);
-      } catch {
-        throw new ApiError(400, "INVALID_UPLOAD_METADATA", "Video metadata is invalid.");
-      }
-      validateUploadPath(pathname, uploadPayload.file.name);
-
-      return {
-        allowedContentTypes: [uploadPayload.file.contentType],
-        maximumSizeInBytes: uploadPayload.file.size,
-        addRandomSuffix: true,
-        tokenPayload: JSON.stringify(uploadPayload),
-      };
+      throw new ApiError(400, "VIDEO_UPLOADS_USE_GOOGLE_DRIVE", "Video files must be uploaded through the Google Drive resumable upload flow.");
     },
     onUploadCompleted: async ({ blob, tokenPayload }) => {
-      if (tokenPayload === THUMBNAIL_UPLOAD_TOKEN_PAYLOAD) {
-        return;
-      }
-
-      const uploadPayload = parseVideoUploadPayload(tokenPayload ?? null);
-      const expectedContentType = getVideoContentType(uploadPayload.file.name);
-
-      if (
-        !blob.pathname.startsWith(`${VIDEO_BLOB_PATH_PREFIX}/`) ||
-        !expectedContentType ||
-        !isSupportedVideoContentType(blob.contentType) ||
-        blob.contentType.toLowerCase().split(";", 1)[0] !== expectedContentType
-      ) {
-        throw new Error("Completed blob did not match the authorized video upload.");
-      }
-
-      // Callbacks may be retried. Do not create a second project record for the same Blob URL.
-      if (await getVideoByBlobUrl(blob.url)) {
-        return;
-      }
-
-      await createVideo({
-        ...uploadPayload.metadata,
-        videoUrl: blob.url,
-      });
+      if (tokenPayload !== THUMBNAIL_UPLOAD_TOKEN_PAYLOAD || !blob.pathname.startsWith(THUMBNAIL_BLOB_PATH_PREFIX)) throw new Error("Unexpected Blob upload callback.");
     },
   });
 

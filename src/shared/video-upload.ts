@@ -1,16 +1,19 @@
 import { z } from "zod";
 
-export const MAX_VIDEO_SIZE_BYTES = 2 * 1024 * 1024 * 1024; // 2 GiB
+// This is duplicated from the server default for immediate client feedback. The
+// server is authoritative and can be configured with MAX_VIDEO_SIZE_BYTES.
+export const MAX_VIDEO_SIZE_BYTES = 5 * 1024 * 1024 * 1024; // 5 GiB
 export const VIDEO_BLOB_PATH_PREFIX = "portfolio-videos";
 
 export const videoFormats = {
   mp4: "video/mp4",
   webm: "video/webm",
   mov: "video/quicktime",
+  m4v: "video/x-m4v",
 } as const;
 
 export const supportedVideoContentTypes = Object.values(videoFormats);
-export const videoFileAccept = ".mp4,.webm,.mov,video/mp4,video/webm,video/quicktime";
+export const videoFileAccept = ".mp4,.webm,.mov,.m4v,video/mp4,video/webm,video/quicktime,video/x-m4v";
 
 export const videoProjectMetadataSchema = z
   .object({
@@ -34,7 +37,7 @@ const videoUploadPayloadSchema = z
       .object({
         name: z.string().trim().min(1).max(255),
         size: z.number().int().positive().max(MAX_VIDEO_SIZE_BYTES),
-        contentType: z.enum(["video/mp4", "video/webm", "video/quicktime"]),
+        contentType: z.enum(["video/mp4", "video/webm", "video/quicktime", "video/x-m4v"]),
       })
       .strict(),
   })
@@ -64,7 +67,7 @@ export function sanitizeVideoFileName(fileName: string): string {
   const extension = getVideoExtension(fileName);
 
   if (!extension) {
-    throw new Error("Only MP4, WebM, and MOV video files are supported.");
+    throw new Error("Only MP4, WebM, MOV, and M4V video files are supported.");
   }
 
   const baseName = fileName.slice(0, -(extension.length + 1))
@@ -98,7 +101,7 @@ export function validateVideoFile(file: Pick<File, "name" | "size" | "type">): {
   const contentType = getVideoContentType(file.name);
 
   if (!contentType) {
-    throw new Error("Choose an MP4, WebM, or MOV video file.");
+    throw new Error("Choose an MP4, WebM, MOV, or M4V video file.");
   }
 
   if (!Number.isFinite(file.size) || file.size <= 0) {
@@ -106,7 +109,7 @@ export function validateVideoFile(file: Pick<File, "name" | "size" | "type">): {
   }
 
   if (file.size > MAX_VIDEO_SIZE_BYTES) {
-    throw new Error("Videos must be 2 GiB or smaller.");
+    throw new Error("Videos must be 5 GiB or smaller.");
   }
 
   if (file.type && !isSupportedVideoContentType(file.type)) {

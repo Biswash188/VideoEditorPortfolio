@@ -17,30 +17,31 @@ export type UploadPortfolioVideoOptions = {
 };
 
 /**
- * Performs a browser-to-Blob multipart upload. The Vercel Blob read/write token
- * remains on the server; this only requests a short-lived, constrained client token.
+ * Sends video bytes directly to Google Drive. Only metadata ever goes through
+ * this app's API. File.slice keeps multi-GB files out of JS heap memory.
  */
 export async function uploadPortfolioVideo({
   file,
   metadata,
   signal,
   onProgress,
-}: UploadPortfolioVideoOptions): Promise<PutBlobResult> {
+}: UploadPortfolioVideoOptions): Promise<void> {
   const validatedMetadata = videoProjectMetadataSchema.parse(metadata);
   const { contentType } = validateVideoFile(file);
-
-  return upload(createVideoBlobPath(file.name), file, {
-    access: "public",
-    contentType,
-    handleUploadUrl: "/api/videos/upload",
-    clientPayload: JSON.stringify({
-      metadata: validatedMetadata,
-      file: { name: file.name, size: file.size, contentType },
-    }),
-    multipart: true,
-    abortSignal: signal,
-    onUploadProgress: onProgress,
-  });
+  const sessionResponse = await fetch("/api/videos/upload-session", { method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ metadata: validatedMetadata, file: { name: file.name, size: file.size, contentType } }), signal });
+  if (!sessionResponse.ok) throw new Error((await sessionResponse.json().catch(() => undefined))?.error?.message || "Could not start the Google Drive upload.");
+  const session = await sessionResponse.json() as { uploadSessionId: string; completionToken: string; uploadUrl: string; chunkSize: number };
+  let offset = 0;
+  const retry = async <T>(work: () => Promise<T>): Promise<T> => { let last: unknown; for (let attempt = 0; attempt < 5; attempt += 1) { try { return await work(); } catch (error) { last = error; if (signal?.aborted) throw error; await new Promise(resolve => window.setTimeout(resolve, 500 * 2 ** attempt)); } } throw last; };
+  while (offset < file.size) {
+    if (signal?.aborted) throw new DOMException("Upload cancelled", "AbortError");
+    const end = Math.min(offset + session.chunkSize, file.size);
+    const response = await retry(async () => { const result = await fetch(session.uploadUrl, { method: "PUT", headers: { "Content-Type": contentType, "Content-Range": `bytes ${offset}-${end - 1}/${file.size}` }, body: file.slice(offset, end), signal }); if (result.status >= 500) throw new Error("Google Drive temporarily rejected the chunk."); return result; });
+    if (response.status === 308) { const range = response.headers.get("Range"); offset = range ? Number(range.match(/-(\d+)$/)?.[1] ?? end - 1) + 1 : end; }
+    else if (response.ok) { const completed = await response.json() as { id?: string }; if (!completed.id) throw new Error("Google Drive did not return an uploaded file ID."); offset = file.size; const finish = await fetch("/api/videos/complete", { method: "POST", credentials: "same-origin", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ uploadSessionId: session.uploadSessionId, completionToken: session.completionToken, googleDriveFileId: completed.id }) }); if (!finish.ok) throw new Error((await finish.json().catch(() => undefined))?.error?.message || "Google Drive upload succeeded, but portfolio finalization failed. Retry the completion request from this browser session."); }
+    else throw new Error(`Google Drive rejected the upload chunk (${response.status}).`);
+    onProgress?.({ loaded: offset, total: file.size, percentage: offset / file.size * 100 });
+  }
 }
 
 export async function uploadPortfolioThumbnail(file: File, signal?: AbortSignal): Promise<PutBlobResult> {
