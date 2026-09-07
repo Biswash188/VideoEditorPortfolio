@@ -1,7 +1,7 @@
 import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
-import { requireAdmin } from "../../src/server/auth.js";
-import { requireBlobReadWriteToken } from "../../src/server/env.js";
-import { ApiError, withErrorHandling } from "../../src/server/errors.js";
+import { requireAdmin } from "../../auth.js";
+import { requireBlobReadWriteToken } from "../../env.js";
+import { ApiError, withErrorHandling } from "../../errors.js";
 
 const THUMBNAIL_BLOB_PATH_PREFIX = "portfolio-thumbnails/";
 const THUMBNAIL_UPLOAD_TOKEN_PAYLOAD = "thumbnail";

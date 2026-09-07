@@ -1,7 +1,7 @@
 import { ApiError } from "./errors.js";
 import { requireGoogleDriveConfig } from "./env.js";
 
-type DriveFile = { id: string; name: string; mimeType: string; size?: string; trashed?: boolean };
+type DriveFile = { id: string; name: string; mimeType: string; size?: string; trashed?: boolean; parents?: string[] };
 
 /**
  * Drive's resumable/session and mutation endpoints return tiny JSON or empty
@@ -50,7 +50,7 @@ export async function createResumableUploadSession(input: { filename: string; mi
 }
 
 export async function getDriveFile(id: string): Promise<DriveFile> {
-  const response = await driveFetch(`files/${encodeURIComponent(id)}?fields=id,name,mimeType,size,trashed`);
+  const response = await driveFetch(`files/${encodeURIComponent(id)}?fields=id,name,mimeType,size,trashed,parents`);
   if (!response.ok) { await drainResponse(response); throw new ApiError(400, "INVALID_DRIVE_FILE", "The uploaded Google Drive file could not be verified."); }
   return response.json() as Promise<DriveFile>;
 }

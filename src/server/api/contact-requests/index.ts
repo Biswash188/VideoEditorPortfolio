@@ -1,10 +1,10 @@
 import { z } from "zod";
 
-import { createContactRequest } from "../../src/server/database/contact-requests.js";
+import { createContactRequest } from "../../database/contact-requests.js";
 
-import { withErrorHandling } from "../../src/server/errors.js";
+import { withErrorHandling } from "../../errors.js";
 
-import { parseJsonBody } from "../../src/server/validation.js";
+import { parseJsonBody } from "../../validation.js";
 
 const createContactRequestSchema = z.object({
   name: z.string().trim().min(1, "Name is required.").max(255),

@@ -1,10 +1,10 @@
 import { z } from "zod";
-import { requireAdmin } from "../../../src/server/auth.js";
-import { deleteVideo, getVideoById, updateVideo } from "../../../src/server/database/videos.js";
-import { renameDriveFile, trashDriveFile } from "../../../src/server/google-drive.js";
-import { ApiError, withErrorHandling } from "../../../src/server/errors.js";
-import { parseJsonBody } from "../../../src/server/validation.js";
-import { videoProjectMetadataSchema } from "../../../src/shared/video-upload.js";
+import { requireAdmin } from "../../../auth.js";
+import { deleteVideo, getVideoById, updateVideo } from "../../../database/videos.js";
+import { renameDriveFile, trashDriveFile } from "../../../google-drive.js";
+import { ApiError, withErrorHandling } from "../../../errors.js";
+import { parseJsonBody } from "../../../validation.js";
+import { videoProjectMetadataSchema } from "../../../../shared/video-upload.js";
 
 const updateSchema = videoProjectMetadataSchema.partial().extend({ videoUrl: z.string().url().max(2_048).optional() }).strict();
 export default { fetch: withErrorHandling(async (request) => {

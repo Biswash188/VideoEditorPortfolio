@@ -1,4 +1,4 @@
-import { withErrorHandling } from "../src/server/errors.js";
+import { withErrorHandling } from "../errors.js";
 
 export default {
   fetch: withErrorHandling((request) => {
