@@ -195,12 +195,19 @@ export function Portfolio() {
       <section className="py-16">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredProjects.map((project) => (
-              <Card
-                key={project.id}
-                className="group overflow-hidden cursor-pointer hover:shadow-xl transition-shadow"
-              >
-                <div className="relative aspect-video overflow-hidden">
+            {filteredProjects.map((project) => {
+              const isDocumentary = project.category === "Documentary";
+
+              return (
+                <Card
+                  key={project.id}
+                  className="group overflow-hidden cursor-pointer hover:shadow-xl transition-shadow"
+                >
+                <div
+                  className={`relative mx-auto w-full overflow-hidden ${
+                    isDocumentary ? "aspect-video" : "aspect-[9/16] max-w-[20rem]"
+                  }`}
+                >
                   {project.videoUrl || project.videoEmbedUrl ? (
                     <PortfolioVideoPlayer
                       title={project.title}
@@ -235,8 +242,9 @@ export function Portfolio() {
                     {project.client} • {project.year}
                   </div>
                 </CardContent>
-              </Card>
-            ))}
+                </Card>
+              );
+            })}
           </div>
 
           {filteredProjects.length === 0 && (
