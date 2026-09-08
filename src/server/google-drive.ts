@@ -74,13 +74,12 @@ export async function trashDriveFile(id: string): Promise<void> {
 }
 
 /**
- * A direct Drive download URL is useful when a user explicitly downloads a
- * file, but it is not a reliable media-stream source. Drive may answer it
- * with an attachment response or an interstitial page, which makes an HTML
- * video element fail even though the file itself is public.
+ * This is Drive's content host (not its share/preview page). Supplying this
+ * URL to a media element lets the browser request the original public bytes
+ * directly, without waiting for Drive's separate preview transcoding job.
  */
 export function drivePlaybackUrl(fileId: string): string {
-  return `https://drive.google.com/uc?export=download&id=${encodeURIComponent(fileId)}`;
+  return `https://drive.usercontent.google.com/download?id=${encodeURIComponent(fileId)}&export=download&confirm=t`;
 }
 
 /**

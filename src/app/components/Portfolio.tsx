@@ -6,6 +6,44 @@ import { Play } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback.js";
 import { portfolioCategories } from "../../shared/portfolio.js";
 
+type PortfolioVideoPlayerProps = {
+  title: string;
+  videoUrl?: string | null;
+  videoEmbedUrl?: string | null;
+  poster?: string | null;
+};
+
+function PortfolioVideoPlayer({ title, videoUrl, videoEmbedUrl, poster }: PortfolioVideoPlayerProps) {
+  const [useDrivePreview, setUseDrivePreview] = useState(false);
+
+  if (videoUrl && !useDrivePreview) {
+    return (
+      <video
+        src={videoUrl}
+        poster={poster ?? undefined}
+        controls
+        preload="metadata"
+        className="h-full w-full object-cover"
+        onError={() => videoEmbedUrl && setUseDrivePreview(true)}
+      />
+    );
+  }
+
+  if (videoEmbedUrl) {
+    return (
+      <iframe
+        src={videoEmbedUrl}
+        title={`${title} video player`}
+        className="h-full w-full border-0"
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowFullScreen
+      />
+    );
+  }
+
+  return null;
+}
+
 export function Portfolio() {
   const categories = ["All", ...portfolioCategories];
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -161,16 +199,13 @@ export function Portfolio() {
                 className="group overflow-hidden cursor-pointer hover:shadow-xl transition-shadow"
               >
                 <div className="relative aspect-video overflow-hidden">
-                  {project.videoEmbedUrl ? (
-                    <iframe
-                      src={project.videoEmbedUrl}
-                      title={`${project.title} video player`}
-                      className="h-full w-full border-0"
-                      allow="autoplay; fullscreen; picture-in-picture"
-                      allowFullScreen
+                  {project.videoUrl || project.videoEmbedUrl ? (
+                    <PortfolioVideoPlayer
+                      title={project.title}
+                      videoUrl={project.videoUrl}
+                      videoEmbedUrl={project.videoEmbedUrl}
+                      poster={project.image}
                     />
-                  ) : project.videoUrl ? (
-                    <video src={project.videoUrl} poster={project.image ?? undefined} controls preload="metadata" className="w-full h-full object-cover" />
                   ) : (
                     <ImageWithFallback src={project.image!} alt={project.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                   )}
