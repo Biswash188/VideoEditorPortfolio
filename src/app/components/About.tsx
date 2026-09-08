@@ -119,7 +119,7 @@ export function About() {
                 >
                   <div className="w-full h-full rounded-full overflow-hidden bg-background">
                     <ImageWithFallback
-                      src="/profile-editor.png"
+                      src="/profile-editor.jpeg"
                       alt="Profile photo"
                       className="w-full h-full object-cover"
                     />

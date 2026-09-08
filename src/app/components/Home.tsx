@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import { useEffect, useState } from "react";
 import { Button } from "./ui/button.js";
 import { Card, CardContent } from "./ui/card.js";
 import { Badge } from "./ui/badge.js";
@@ -6,31 +7,40 @@ import { Play, Film, Scissors, Sparkles, Award, Users } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback.js";
 
 export function Home() {
-  const featuredProjects = [
-    {
-      id: 1,
-      title: "Brand Documentary",
-      category: "Corporate",
-      image: "https://images.unsplash.com/photo-1612548403247-aa2873e9422d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjaW5lbWF0aWMlMjBmaWxtJTIwcHJvZHVjdGlvbiUyMGNhbWVyYXxlbnwxfHx8fDE3ODI2NTUxNTJ8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      duration: "3:45",
-    },
-    {
-      id: 2,
-      title: "Product Launch",
-      category: "Commercial",
-      image: "https://images.unsplash.com/photo-1616418625172-c607e16733ca?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxtb2Rlcm4lMjBjb21tZXJjaWFsJTIwYWR2ZXJ0aXNpbmd8ZW58MXx8fHwxNzgyNjU1MTU0fDA&ixlib=rb-4.1.0&q=80&w=1080",
-      duration: "2:30",
-    },
-    {
-      id: 3,
-      title: "Creative Studio",
-      category: "Behind the Scenes",
-      image: "https://images.unsplash.com/photo-1638545818407-ac7a54b544fd?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxjcmVhdGl2ZSUyMHN0dWRpbyUyMGZpbG1tYWtlcnxlbnwxfHx8fDE3ODI2NTUxNTN8MA&ixlib=rb-4.1.0&q=80&w=1080",
-      duration: "5:20",
-    },
-  ];
+  const [featuredProjects, setFeaturedProjects] = useState<Array<{
+    id: string;
+    title: string;
+    category: string;
+    image: string | null;
+    duration: string;
+  }>>([]);
 
- 
+  useEffect(() => {
+    fetch("/api/videos")
+      .then(async (response) => response.ok ? response.json() : [])
+      .then((videos: Array<{
+        id: string;
+        title: string;
+        category: string;
+        thumbnailUrl: string | null;
+        durationSeconds: number | null;
+        isFeatured: boolean;
+      }>) => {
+        setFeaturedProjects(videos
+          .filter((video) => video.isFeatured)
+          .map((video) => ({
+            id: video.id,
+            title: video.title,
+            category: video.category,
+            image: video.thumbnailUrl,
+            duration: video.durationSeconds
+              ? `${Math.floor(video.durationSeconds / 60)}:${String(video.durationSeconds % 60).padStart(2, "0")}`
+              : "Video",
+          })));
+      })
+      .catch(() => setFeaturedProjects([]));
+  }, []);
+
   return (
     <div className="w-full">
       {/* Hero Section */}
@@ -91,11 +101,15 @@ export function Home() {
                 className="group overflow-hidden cursor-pointer hover:shadow-lg transition-shadow"
               >
                 <div className="relative aspect-video overflow-hidden">
-                  <ImageWithFallback
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
+                  {project.image ? (
+                    <ImageWithFallback
+                      src={project.image}
+                      alt={project.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    />
+                  ) : (
+                    <div className="h-full w-full bg-muted" aria-label={`${project.title} thumbnail`} />
+                  )}
                   <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                     <div className="size-16 rounded-full bg-white/90 flex items-center justify-center">
                       <Play className="size-8 text-black ml-1" fill="black" />
@@ -115,6 +129,10 @@ export function Home() {
             ))}
           </div>
 
+          {featuredProjects.length === 0 && (
+            <p className="text-center text-muted-foreground">Featured projects will appear here soon.</p>
+          )}
+
           <div className="text-center mt-12">
             <Button asChild variant="outline" size="lg">
               <Link to="/portfolio">View All Projects</Link>
@@ -122,7 +140,6 @@ export function Home() {
           </div>
         </div>
       </section>
-
       {/* Services Section */}
       <section className="py-20 bg-muted/50">
         <div className="container mx-auto px-4">

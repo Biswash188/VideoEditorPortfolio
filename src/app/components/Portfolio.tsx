@@ -67,7 +67,9 @@ export function Portfolio() {
       }).catch(() => setDatabaseProjects([]));
   }, []);
 
-  const projects: Array<{ id: number; title: string; category: string; image: string; duration: string; client: string; year: string; videoUrl?: string; videoEmbedUrl?: string }> = [
+  /* The portfolio intentionally renders only videos published through admin. */
+  const projects: Array<{ id: number; title: string; category: string; image: string; duration: string; client: string; year: string; videoUrl?: string; videoEmbedUrl?: string }> = [];
+  /*
     {
       id: 1,
       title: "Tech Startup Launch",
@@ -149,7 +151,7 @@ export function Portfolio() {
       client: "Studio",
       year: "2026",
     },
-  ];
+  */
 
   const filteredProjects = [...projects, ...databaseProjects].filter(
     (project) =>
