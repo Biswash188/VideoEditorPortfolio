@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Card, CardContent } from "./ui/card.js";
 import { Badge } from "./ui/badge.js";
 import { Button } from "./ui/button.js";
-import { Play } from "lucide-react";
+import { Maximize2, Pause, Play, Volume2, VolumeX } from "lucide-react";
 import { ImageWithFallback } from "./figma/ImageWithFallback.js";
 import { portfolioCategories } from "../../shared/portfolio.js";
 
@@ -15,18 +15,93 @@ type PortfolioVideoPlayerProps = {
 
 function PortfolioVideoPlayer({ title, videoUrl, videoEmbedUrl, poster }: PortfolioVideoPlayerProps) {
   const [useDrivePreview, setUseDrivePreview] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || useDrivePreview) return;
+
+    const syncState = () => {
+      setIsPlaying(!video.paused);
+      setIsMuted(video.muted);
+      setCurrentTime(video.currentTime);
+      setDuration(Number.isFinite(video.duration) ? video.duration : 0);
+    };
+
+    const events: Array<keyof HTMLMediaElementEventMap> = ["loadedmetadata", "durationchange", "timeupdate", "play", "pause", "ended", "volumechange"];
+    events.forEach((event) => video.addEventListener(event, syncState));
+    syncState();
+    return () => events.forEach((event) => video.removeEventListener(event, syncState));
+  }, [useDrivePreview, videoUrl]);
+
+  const formatTime = (time: number) => {
+    if (!Number.isFinite(time)) return "0:00";
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60).toString().padStart(2, "0");
+    return `${minutes}:${seconds}`;
+  };
+
+  const togglePlayback = async () => {
+    const video = videoRef.current;
+    if (!video) return;
+    if (video.paused) await video.play().catch(() => undefined);
+    else video.pause();
+  };
 
   if (videoUrl && !useDrivePreview) {
-    return (
+    return <div className="relative h-full w-full bg-black">
       <video
+        ref={videoRef}
         src={videoUrl}
         poster={poster ?? undefined}
-        controls
         preload="metadata"
-        className="h-full w-full object-cover"
+        playsInline
+        className="h-full w-full object-contain"
         onError={() => videoEmbedUrl && setUseDrivePreview(true)}
       />
-    );
+
+      {!isPlaying && <button
+        type="button"
+        onClick={() => void togglePlayback()}
+        aria-label={`Play ${title}`}
+        className="absolute left-1/2 top-1/2 z-10 flex size-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-background/90 text-foreground shadow-lg transition-transform hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+      >
+        <Play className="ml-0.5 size-5" fill="currentColor" />
+      </button>}
+
+      <div className="absolute inset-x-0 bottom-0 z-10 flex items-center gap-2 bg-gradient-to-t from-black/90 via-black/65 to-transparent px-2 pb-2 pt-7 text-white sm:px-3">
+        <button type="button" onClick={() => void togglePlayback()} aria-label={isPlaying ? `Pause ${title}` : `Play ${title}`} className="flex size-9 shrink-0 items-center justify-center rounded-full hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
+          {isPlaying ? <Pause className="size-4" fill="currentColor" /> : <Play className="ml-0.5 size-4" fill="currentColor" />}
+        </button>
+        <input
+          type="range"
+          aria-label={`Seek ${title}`}
+          min="0"
+          max={duration || 0}
+          step="0.1"
+          value={Math.min(currentTime, duration || 0)}
+          onChange={(event) => {
+            const video = videoRef.current;
+            const nextTime = Number(event.target.value);
+            if (!video) return;
+            video.currentTime = nextTime;
+            setCurrentTime(nextTime);
+          }}
+          className="min-w-0 flex-1 accent-primary"
+        />
+        <span className="shrink-0 text-xs tabular-nums">{formatTime(currentTime)} / {formatTime(duration)}</span>
+        <button type="button" onClick={() => { const video = videoRef.current; if (video) video.muted = !video.muted; }} aria-label={isMuted ? "Unmute video" : "Mute video"} className="flex size-9 shrink-0 items-center justify-center rounded-full hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
+          {isMuted ? <VolumeX className="size-4" /> : <Volume2 className="size-4" />}
+        </button>
+        <button type="button" onClick={() => void videoRef.current?.requestFullscreen?.()} aria-label="View video fullscreen" className="flex size-9 shrink-0 items-center justify-center rounded-full hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
+          <Maximize2 className="size-4" />
+        </button>
+      </div>
+    </div>;
   }
 
   if (videoEmbedUrl) {
