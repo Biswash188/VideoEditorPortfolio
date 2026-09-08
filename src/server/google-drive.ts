@@ -73,4 +73,21 @@ export async function trashDriveFile(id: string): Promise<void> {
   if (!response.ok) throw new ApiError(502, "GOOGLE_DELETE_FAILED", "Google Drive could not move the video to trash; the database was not changed.");
 }
 
-export function drivePlaybackUrl(fileId: string): string { return `https://drive.google.com/uc?export=download&id=${encodeURIComponent(fileId)}`; }
+/**
+ * A direct Drive download URL is useful when a user explicitly downloads a
+ * file, but it is not a reliable media-stream source. Drive may answer it
+ * with an attachment response or an interstitial page, which makes an HTML
+ * video element fail even though the file itself is public.
+ */
+export function drivePlaybackUrl(fileId: string): string {
+  return `https://drive.google.com/uc?export=download&id=${encodeURIComponent(fileId)}`;
+}
+
+/**
+ * Drive's preview route is its supported browser player for public video
+ * files. It handles Drive's redirects, large-file confirmation flow, and
+ * codecs without asking the portfolio page to stream the download endpoint.
+ */
+export function drivePreviewUrl(fileId: string): string {
+  return `https://drive.google.com/file/d/${encodeURIComponent(fileId)}/preview`;
+}

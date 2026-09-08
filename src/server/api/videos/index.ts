@@ -1,5 +1,5 @@
 import { listPublishedVideos } from "../../database/videos.js";
-import { drivePlaybackUrl } from "../../google-drive.js";
+import { drivePlaybackUrl, drivePreviewUrl } from "../../google-drive.js";
 
 import { withErrorHandling } from "../../errors.js";
 
@@ -13,6 +13,12 @@ export default { fetch: withErrorHandling(async (request) => {
     videoUrl: video.googleDriveFileId
       ? drivePlaybackUrl(video.googleDriveFileId)
       : video.videoUrl,
+    // Google Drive's download endpoint is not a dependable <video> source.
+    // Send its preview-player URL separately so the client can use the
+    // provider-supported embedded player for Drive-backed uploads.
+    videoEmbedUrl: video.googleDriveFileId
+      ? drivePreviewUrl(video.googleDriveFileId)
+      : null,
   }));
   return Response.json(publicVideos, { headers: { "Cache-Control": "public, max-age=0, s-maxage=10, stale-while-revalidate=30" } });
 }) };

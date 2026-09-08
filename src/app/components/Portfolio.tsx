@@ -9,18 +9,19 @@ import { portfolioCategories } from "../../shared/portfolio.js";
 export function Portfolio() {
   const categories = ["All", ...portfolioCategories];
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [databaseProjects, setDatabaseProjects] = useState<Array<{ id: string; title: string; category: string; image?: string | null; videoUrl?: string | null; duration: string; client: string; year: string }>>([]);
+  const [databaseProjects, setDatabaseProjects] = useState<Array<{ id: string; title: string; category: string; image?: string | null; videoUrl?: string | null; videoEmbedUrl?: string | null; duration: string; client: string; year: string }>>([]);
 
   useEffect(() => {
     fetch("/api/videos")
       .then(async (response) => response.ok ? response.json() : [])
-      .then((videos: Array<{ id: string; title: string; category: string; thumbnailUrl: string | null; videoUrl: string | null; durationSeconds: number | null; createdAt: string }>) => {
+      .then((videos: Array<{ id: string; title: string; category: string; thumbnailUrl: string | null; videoUrl: string | null; videoEmbedUrl: string | null; durationSeconds: number | null; createdAt: string }>) => {
         setDatabaseProjects(videos.map((video) => ({
           id: video.id,
           title: video.title,
           category: video.category,
           image: video.thumbnailUrl,
           videoUrl: video.videoUrl,
+          videoEmbedUrl: video.videoEmbedUrl,
           duration: video.durationSeconds ? `${Math.floor(video.durationSeconds / 60)}:${String(video.durationSeconds % 60).padStart(2, "0")}` : "Video",
           client: "Portfolio project",
           year: String(new Date(video.createdAt).getFullYear()),
@@ -28,7 +29,7 @@ export function Portfolio() {
       }).catch(() => setDatabaseProjects([]));
   }, []);
 
-  const projects: Array<{ id: number; title: string; category: string; image: string; duration: string; client: string; year: string; videoUrl?: string }> = [
+  const projects: Array<{ id: number; title: string; category: string; image: string; duration: string; client: string; year: string; videoUrl?: string; videoEmbedUrl?: string }> = [
     {
       id: 1,
       title: "Tech Startup Launch",
@@ -160,17 +161,29 @@ export function Portfolio() {
                 className="group overflow-hidden cursor-pointer hover:shadow-xl transition-shadow"
               >
                 <div className="relative aspect-video overflow-hidden">
-                  {project.videoUrl ? <video src={project.videoUrl} poster={project.image ?? undefined} controls preload="metadata" className="w-full h-full object-cover" /> : <ImageWithFallback src={project.image!} alt={project.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  {project.videoEmbedUrl ? (
+                    <iframe
+                      src={project.videoEmbedUrl}
+                      title={`${project.title} video player`}
+                      className="h-full w-full border-0"
+                      allow="autoplay; fullscreen; picture-in-picture"
+                      allowFullScreen
+                    />
+                  ) : project.videoUrl ? (
+                    <video src={project.videoUrl} poster={project.image ?? undefined} controls preload="metadata" className="w-full h-full object-cover" />
+                  ) : (
+                    <ImageWithFallback src={project.image!} alt={project.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  )}
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity group-hover:opacity-100">
                     <div className="size-20 rounded-full bg-white/90 flex items-center justify-center transform group-hover:scale-110 transition-transform">
                       <Play className="size-10 text-black ml-1" fill="black" />
                     </div>
                   </div>
-                  <div className="absolute top-4 right-4">
+                  <div className="pointer-events-none absolute top-4 right-4">
                     <Badge variant="secondary">{project.duration}</Badge>
                   </div>
-                  <div className="absolute bottom-4 left-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="pointer-events-none absolute bottom-4 left-4 right-4 opacity-0 transition-opacity group-hover:opacity-100">
                     <p className="text-white text-sm">
                       {project.client} • {project.year}
                     </p>
