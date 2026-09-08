@@ -58,6 +58,7 @@ function PortfolioVideoPlayer({ title, videoUrl, videoEmbedUrl, poster }: Portfo
         ref={videoRef}
         src={videoUrl}
         poster={poster ?? undefined}
+        controls={false}
         preload="metadata"
         playsInline
         className="h-full w-full object-contain"

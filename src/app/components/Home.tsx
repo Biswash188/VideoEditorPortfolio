@@ -50,7 +50,7 @@ function FeaturedVideoPlayer({ title, videoUrl, videoEmbedUrl, poster }: Feature
 
   if (videoUrl && !useDrivePreview) {
     return <div className="relative h-full w-full bg-black">
-      <video ref={videoRef} src={videoUrl} poster={poster ?? undefined} preload="metadata" playsInline className="h-full w-full object-contain" onError={() => videoEmbedUrl && setUseDrivePreview(true)} />
+      <video ref={videoRef} src={videoUrl} poster={poster ?? undefined} controls={false} preload="metadata" playsInline className="h-full w-full object-contain" onError={() => videoEmbedUrl && setUseDrivePreview(true)} />
       {!isPlaying && <button type="button" onClick={() => void togglePlayback()} aria-label={`Play ${title}`} className="absolute left-1/2 top-1/2 z-10 flex size-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-background/90 text-foreground shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"><Play className="ml-0.5 size-5" fill="currentColor" /></button>}
       <div className="absolute inset-x-0 bottom-0 z-10 flex items-center gap-2 bg-gradient-to-t from-black/90 via-black/65 to-transparent px-2 pb-2 pt-7 text-white sm:px-3">
         <button type="button" onClick={() => void togglePlayback()} aria-label={isPlaying ? `Pause ${title}` : `Play ${title}`} className="flex size-9 shrink-0 items-center justify-center rounded-full hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">{isPlaying ? <Pause className="size-4" fill="currentColor" /> : <Play className="ml-0.5 size-4" fill="currentColor" />}</button>
