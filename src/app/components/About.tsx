@@ -20,9 +20,7 @@ import { ImageWithFallback } from "./figma/ImageWithFallback.js";
 export function About() {
   const skills = [
     { name: "Adobe Premiere Pro", level: 95 },
-    { name: "DaVinci Resolve", level: 90 },
     { name: "After Effects", level: 85 },
-    { name: "Final Cut Pro", level: 80 },
     { name: "Color Grading", level: 90 },
     { name: "Motion Graphics", level: 85 },
     { name: "Sound Design", level: 75 },
@@ -145,7 +143,7 @@ export function About() {
                 <div className="w-12 h-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full mb-6" />
 
                 <p className="text-lg text-muted-foreground mb-6 leading-relaxed">
-                  I'm a dedicated video editor with over 5 years of
+                  I'm a dedicated video editor with over 2 years of
                   experience turning raw footage into engaging and
                   impactful visual stories. My expertise covers a wide
                   range of projects, including commercials,
@@ -185,7 +183,7 @@ export function About() {
                         Experience
                       </p>
                       <p className="text-muted-foreground">
-                        5+ Years
+                        2+ Years
                       </p>
                     </div>
                   </div>
@@ -257,7 +255,7 @@ export function About() {
                       </p>
 
                       <p className="text-muted-foreground text-sm break-all">
-                        youremail@gmail.com
+                        bn660568@gmail.com
                       </p>
                     </div>
                   </div>
